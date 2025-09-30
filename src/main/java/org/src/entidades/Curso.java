@@ -1,4 +1,4 @@
-﻿package org.src.entidades;
+package org.src.entidades;
 import java.util.*;
 
 public class Curso {
