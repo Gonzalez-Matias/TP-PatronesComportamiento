@@ -14,7 +14,6 @@ public class Inscripcion {
 
     public Inscripcion(Alumno alumno, Curso curso){
         this.alumno = alumno;
-        alumno.agregarInscripcion(this);
         this.curso = curso;
         this.fechaCreacion = LocalDateTime.now();
         this.estado = EstadoInscripcion.EN_ESPERA;

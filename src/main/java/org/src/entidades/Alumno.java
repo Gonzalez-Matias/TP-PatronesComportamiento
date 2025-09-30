@@ -1,6 +1,9 @@
 package org.src.entidades;
 
+import org.src.Mediator.ChatMediator;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,8 +12,8 @@ public class Alumno extends Persona {
     private List<Inscripcion> inscripciones = new ArrayList<>();
     private List<SolicitudTutoria> solicitudes = new ArrayList<>();
 
-    public Alumno(String nombre, String apellido, String email) {
-        super(nombre, apellido, email);
+    public Alumno(String nombre, String apellido, String email, ChatMediator mediator) {
+        super(nombre, apellido, email, mediator);
     }
 
     @Override
@@ -24,5 +27,16 @@ public class Alumno extends Persona {
 
     public void agregarSolicitudTutoria(SolicitudTutoria solicitud){
         solicitudes.add(solicitud);
+    }
+
+    public List<Inscripcion> getInscripciones(){return Collections.unmodifiableList(inscripciones);}
+
+
+    public void enviar(String mensaje) {
+        System.out.println(nombre + " envia " + mensaje);
+        mediator.enviarMensaje(mensaje, this);
+    }
+    public void recibir(String mensaje) {
+        System.out.println(nombre + " recibe " + mensaje);
     }
 }

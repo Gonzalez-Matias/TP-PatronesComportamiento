@@ -5,6 +5,9 @@ import org.src.ChainOfResponsibility.HandlerAsistente;
 import org.src.ChainOfResponsibility.HandlerCoordinador;
 import org.src.ChainOfResponsibility.HandlerProfesor;
 import org.src.ChainOfResponsibility.HandlerTutorias;
+import org.src.Command.*;
+import org.src.Mediator.ChatMediator;
+import org.src.Mediator.ChatRoom;
 import org.src.entidades.*;
 
 import java.time.LocalDateTime;
@@ -15,11 +18,13 @@ public class Main {
         HandlerTutorias profesor = new HandlerProfesor();
         HandlerTutorias coordinador = new HandlerCoordinador();
 
+        ChatMediator sala1 = new ChatRoom();
+
         asistente.setNext(profesor);
         profesor.setNext(coordinador);
 
-        Alumno alumno = new Alumno("Ana", "Pérez", "ana.perez@gmail.com");
-        Profesor tutor = new Profesor("Luis", "Gómez", "luis.gomez@hotmail.com");
+        Alumno alumno = new Alumno("Ana", "Pérez", "ana.perez@gmail.com", sala1);
+        Profesor tutor = new Profesor("Luis", "Gómez", "luis.gomez@hotmail.com", sala1);
 
         // Debe ser rechazada por ser un domingo
         SolicitudTutoria s1 = new SolicitudTutoria(
@@ -50,5 +55,27 @@ public class Main {
                 LocalDateTime.of(2025, 9, 30, 15, 30)
         );
         asistente.handle(s3);
+
+        sala1.agregarUsuario(alumno);
+        sala1.agregarUsuario(tutor);
+
+        alumno.enviar("Hola a todos!");
+        tutor.enviar("Bienvenida!");
+
+
+        Curso curso = new Curso(Materia.ANALISIS_I, "3k15", "Noche");
+        InscribirseCursoCommand inscribirse = new InscribirseCursoCommand(curso, alumno);
+        AbandonarCursoCommand abandonar = new AbandonarCursoCommand(curso, alumno);
+        SolicitarCertificadoCommand certificado = new SolicitarCertificadoCommand(curso, alumno);
+
+        CursoCommandInvoker controlCursos = new CursoCommandInvoker();
+        controlCursos.setCommand(inscribirse);
+        controlCursos.executeCommand();
+
+        controlCursos.setCommand(certificado);
+        controlCursos.executeCommand();
+
+        controlCursos.setCommand(abandonar);
+        controlCursos.executeCommand();
     }
 }
