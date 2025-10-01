@@ -8,6 +8,7 @@ import org.src.ChainOfResponsibility.HandlerTutorias;
 import org.src.Command.*;
 import org.src.Mediator.ChatMediator;
 import org.src.Mediator.ChatRoom;
+import org.src.Memento.Memento;
 import org.src.entidades.*;
 
 import java.time.LocalDateTime;
@@ -80,5 +81,18 @@ public class Main {
 
         controlCursos.setCommand(abandonar);
         controlCursos.executeCommand();
+
+        //Se inicia examen y se guarda su estado para luego ser restaurado
+
+        Inscripcion inscripcion1 = new Inscripcion(alumno,curso);
+        Examen examen1 = new Examen(inscripcion1,6.0f, LocalDateTime.now(),1);
+        Memento m1 = examen1.save();
+        System.out.println("Estado inicial → nota= " + examen1.getNota());
+        examen1.setNota(9.0f);
+        System.out.println("Estado post modificacion de notas → nota= " + examen1.getNota());
+        examen1.restore(m1);
+        System.out.println("Estado final luego de restarurar examen → nota= " + examen1.getNota());
+
+
     }
 }
