@@ -2,7 +2,7 @@ package org.src.Iterator;
 
 import org.src.entidades.Inscripcion;
 
-public interface CursoIterator {
+public interface InscripcionIterator {
     boolean hasNext();
     Inscripcion next();
 }

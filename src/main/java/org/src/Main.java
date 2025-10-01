@@ -6,8 +6,12 @@ import org.src.ChainOfResponsibility.HandlerCoordinador;
 import org.src.ChainOfResponsibility.HandlerProfesor;
 import org.src.ChainOfResponsibility.HandlerTutorias;
 import org.src.Command.*;
+import org.src.Iterator.InscripcionIterator;
 import org.src.Mediator.ChatMediator;
 import org.src.Mediator.ChatRoom;
+import org.src.Visitor.AlumnoBecado;
+import org.src.Visitor.AlumnoRegular;
+import org.src.Visitor.AplicarBeca;
 import org.src.entidades.*;
 
 import java.time.LocalDateTime;
@@ -23,7 +27,7 @@ public class Main {
         asistente.setNext(profesor);
         profesor.setNext(coordinador);
 
-        Alumno alumno = new Alumno("Ana", "Pérez", "ana.perez@gmail.com", sala1);
+        AlumnoBecado alumno = new AlumnoBecado("Ana", "Pérez", "ana.perez@gmail.com", sala1, true, 0.8F);
         Profesor tutor = new Profesor("Luis", "Gómez", "luis.gomez@hotmail.com", sala1);
 
         // Debe ser rechazada por ser un domingo
@@ -64,12 +68,24 @@ public class Main {
 
 
         Curso curso = new Curso(Materia.ANALISIS_I, "3k15", "Noche");
+        Curso curso2 = new Curso(Materia.ALGEBRA, "1k01", "Mañana");
+        Curso curso3 = new Curso(Materia.FISICA_I, "2k07", "Tarde");
+        Curso curso4 = new Curso(Materia.PROGRAMACION_I, "3k22", "Noche");
         InscribirseCursoCommand inscribirse = new InscribirseCursoCommand(curso, alumno);
+        InscribirseCursoCommand inscribirse2 = new InscribirseCursoCommand(curso2, alumno);
+        InscribirseCursoCommand inscribirse3 = new InscribirseCursoCommand(curso3, alumno);
+        InscribirseCursoCommand inscribirse4 = new InscribirseCursoCommand(curso4, alumno);
         AbandonarCursoCommand abandonar = new AbandonarCursoCommand(curso, alumno);
         SolicitarCertificadoCommand certificado = new SolicitarCertificadoCommand(curso, alumno);
 
         CursoCommandInvoker controlCursos = new CursoCommandInvoker();
         controlCursos.setCommand(inscribirse);
+        controlCursos.executeCommand();
+        controlCursos.setCommand(inscribirse2);
+        controlCursos.executeCommand();
+        controlCursos.setCommand(inscribirse3);
+        controlCursos.executeCommand();
+        controlCursos.setCommand(inscribirse4);
         controlCursos.executeCommand();
 
         controlCursos.setCommand(certificado);
@@ -77,5 +93,14 @@ public class Main {
 
         controlCursos.setCommand(abandonar);
         controlCursos.executeCommand();
+
+        InscripcionIterator inscripciones = alumno.inscripcionesIterator();
+        System.out.println("El alumno " + alumno.getLegajo() + " está inscrito en:");
+        while (inscripciones.hasNext()){
+            System.out.println("- " + inscripciones.next().getCurso().getMateria());
+        }
+
+        AplicarBeca becas = new AplicarBeca();
+        becas.visitar(alumno);
     }
 }
