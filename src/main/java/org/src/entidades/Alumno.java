@@ -2,13 +2,14 @@ package org.src.entidades;
 
 import org.src.Iterator.InscripcionIterator;
 import org.src.Mediator.ChatMediator;
+import org.src.Observer.CursoObserver;
 import org.src.Visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Alumno extends Persona {
+public class Alumno extends Persona implements CursoObserver {
     private static final AtomicInteger SEQ = new AtomicInteger(100000);
     private List<Inscripcion> inscripciones = new ArrayList<>();
     private List<SolicitudTutoria> solicitudes = new ArrayList<>();
@@ -66,5 +67,10 @@ public class Alumno extends Persona {
     }
     public void recibir(String mensaje) {
         System.out.println(nombre + " recibe " + mensaje);
+    }
+
+    @Override
+    public void update(String msg) {
+        System.out.println("Alumno " + nombre + " se notifica: " + msg);
     }
 }
