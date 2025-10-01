@@ -56,6 +56,9 @@ public class Main {
         );
         asistente.handle(s3);
 
+        Alumno alumno2 = new Alumno("Pedro", "Ricon", "pricon@fakemail.com",sala1 );
+
+        sala1.agregarUsuario(alumno2);
         sala1.agregarUsuario(alumno);
         sala1.agregarUsuario(tutor);
 
