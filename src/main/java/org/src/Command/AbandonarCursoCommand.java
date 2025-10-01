@@ -1,11 +1,10 @@
 package org.src.Command;
 
+import org.src.Iterator.InscripcionIterator;
 import org.src.entidades.Alumno;
 import org.src.entidades.Curso;
 import org.src.entidades.EstadoInscripcion;
 import org.src.entidades.Inscripcion;
-
-import java.util.List;
 
 public class AbandonarCursoCommand implements Command{
     private Curso curso;
@@ -18,8 +17,9 @@ public class AbandonarCursoCommand implements Command{
 
     @Override
     public void execute() {
-        List<Inscripcion> inscripciones = alumno.getInscripciones();
-        for (Inscripcion inscripcion : inscripciones){
+        InscripcionIterator inscripciones = alumno.inscripcionesIterator();
+        while (inscripciones.hasNext()){
+            Inscripcion inscripcion = inscripciones.next();
             if (inscripcion.getEstado() != EstadoInscripcion.CANCELADO && inscripcion.getCurso() == this.curso){
                 inscripcion.setEstado(EstadoInscripcion.CANCELADO);
             }
