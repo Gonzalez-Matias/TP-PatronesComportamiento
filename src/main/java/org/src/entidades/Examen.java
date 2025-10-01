@@ -1,5 +1,7 @@
 package org.src.entidades;
 
+import org.src.Memento.Memento;
+
 import java.time.LocalDateTime;
 
 public class Examen {
@@ -15,4 +17,18 @@ public class Examen {
         this.fechaHoraExamen = fechaHoraExamen;
         this.numExamen = numExamen;
     }
+
+    public float getNota() { return this.nota; }
+    public void setNota(float nota) { this.nota = nota; }
+
+    public Memento save(){
+        return new Memento(this.nota, this.fechaHoraExamen,this.numExamen);
+    }
+
+    public void restore(Memento m){
+        this.nota = m.nota;
+        this.fechaHoraExamen = m.fechaHoraExamen;
+        this.numExamen = m.numExamen;
+    }
+
 }
