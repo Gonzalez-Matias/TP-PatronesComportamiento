@@ -1,27 +1,24 @@
 package org.src.entidades;
 
 import org.src.Mediator.ChatMediator;
+import org.src.Mediator.Usuario;
 
-public abstract class Persona {
+public abstract class Persona extends Usuario {
     protected String nombre;
     protected String apellido;
     protected String email;
     protected Integer legajo;
     protected String telefono;
-    protected ChatMediator mediator;
 
     public Persona(String nombre, String apellido, String email, ChatMediator mediator){
+        super(mediator, nombre);
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.legajo = generarLegajo();
-        this.mediator = mediator;
     }
 
     protected abstract Integer generarLegajo();
-
-    public abstract void enviar(String mensaje);
-    public abstract void recibir(String mensaje);
 
     public Integer getLegajo() {
         return legajo;

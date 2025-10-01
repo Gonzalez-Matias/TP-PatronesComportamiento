@@ -1,12 +1,12 @@
 package org.src.Mediator;
 
-abstract class Usuario {
+public abstract class Usuario {
     protected ChatMediator mediator;
-    protected String nombre;
+    protected String nombreUsuario;
 
     public Usuario(ChatMediator mediator, String nombre){
         this.mediator = mediator;
-        this.nombre = nombre;
+        this.nombreUsuario = nombre;
     }
 
     public abstract void enviar(String mensaje);

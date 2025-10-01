@@ -1,9 +1,10 @@
 package org.src.entidades;
 
+import org.src.Iterator.InscripcionIterator;
 import org.src.Mediator.ChatMediator;
+import org.src.Visitor.Visitor;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -29,7 +30,34 @@ public class Alumno extends Persona {
         solicitudes.add(solicitud);
     }
 
-    public List<Inscripcion> getInscripciones(){return Collections.unmodifiableList(inscripciones);}
+    public InscripcionIterator inscripcionesIterator(){
+        List<Inscripcion> inscripcionesVigentes = new ArrayList<>();
+        for (Inscripcion inscripcion : this.inscripciones){
+            if (inscripcion.getEstado() != EstadoInscripcion.CANCELADO){
+                inscripcionesVigentes.add(inscripcion);
+            }
+        }
+        return new InscripcionesIterator(inscripcionesVigentes);
+    }
+
+    private static class InscripcionesIterator implements InscripcionIterator {
+        private List<Inscripcion> inscripciones;
+        private int posicion = 0;
+
+        public InscripcionesIterator(List<Inscripcion> inscripciones){
+            this.inscripciones = inscripciones;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return posicion < inscripciones.size();
+        }
+
+        @Override
+        public Inscripcion next() {
+            return inscripciones.get(posicion++);
+        }
+    }
 
 
     public void enviar(String mensaje) {
