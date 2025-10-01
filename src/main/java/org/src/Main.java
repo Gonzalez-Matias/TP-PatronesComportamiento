@@ -93,6 +93,13 @@ public class Main {
         examen1.restore(m1);
         System.out.println("Estado final luego de restarurar examen → nota= " + examen1.getNota());
 
+        //Se modifica un curso y se notifica a los alumnos, se hace un aviso al curso
 
+        Profesor profesor2 = new Profesor("Ricardo", "Centurion", "prueba@test.com", sala1);
+
+        curso.addObserver(alumno);
+        curso.addObserver(alumno2);
+        curso.setProfesor(profesor2);
+        curso.nuevoAviso("Se suspende la clase de consulta del 20/10 por viento zonda");
     }
 }
