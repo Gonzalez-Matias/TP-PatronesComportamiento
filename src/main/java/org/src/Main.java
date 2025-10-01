@@ -18,12 +18,15 @@ import java.time.LocalDateTime;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("===== SISTEMA DE GESTIÓN HOSPITALARIA =====\n");
+        // Banner general
+        System.out.println("\n====================================================");
+        System.out.println("===== SISTEMA DE GESTIÓN HOSPITALARIA (DEMO) =======");
+        System.out.println("====================================================\n");
 
         // =====================================================================
         // ====================== MEDIATOR — PRUEBAS ============================
         // =====================================================================
-        // Se crea una sala de chat (mediator), se agregan usuarios y se intercambian mensajes.
+        System.out.println("[MEDIATOR] ➜ Creación de sala y registro de usuarios");
         ChatMediator sala1 = new ChatRoom();
 
         AlumnoBecado alumno = new AlumnoBecado("Ana", "Pérez", "ana.perez@gmail.com", sala1, true, 0.8F);
@@ -34,14 +37,15 @@ public class Main {
         sala1.agregarUsuario(alumno);
         sala1.agregarUsuario(tutor);
 
+        System.out.println("[MEDIATOR] ➜ Envío de mensajes");
         alumno.enviar("Hola a todos!");
         tutor.enviar("Bienvenida!");
 
         // =====================================================================
         // ======================= COMMAND — PRUEBAS ============================
         // =====================================================================
-        // Se crean cursos y comandos. Se inscribe al alumno en varios cursos,
-        // se solicita certificado y luego se abandona un curso.
+        System.out.println("\n----------------------------------------------------");
+        System.out.println("[COMMAND] ➜ Creación de cursos y comandos");
         Curso curso = new Curso(Materia.ANALISIS_I, "3k15", "Noche");
         Curso curso2 = new Curso(Materia.ALGEBRA, "1k01", "Mañana");
         Curso curso3 = new Curso(Materia.FISICA_I, "2k07", "Tarde");
@@ -55,69 +59,69 @@ public class Main {
         SolicitarCertificadoCommand certificado = new SolicitarCertificadoCommand(curso, alumno);
 
         CursoCommandInvoker controlCursos = new CursoCommandInvoker();
-        controlCursos.setCommand(inscribirse);
-        controlCursos.executeCommand();
-        controlCursos.setCommand(inscribirse2);
-        controlCursos.executeCommand();
-        controlCursos.setCommand(inscribirse3);
-        controlCursos.executeCommand();
-        controlCursos.setCommand(inscribirse4);
-        controlCursos.executeCommand();
+        System.out.println("[COMMAND] ➜ Ejecutando Inscribirse (x4)");
+        controlCursos.setCommand(inscribirse);  controlCursos.executeCommand();
+        controlCursos.setCommand(inscribirse2); controlCursos.executeCommand();
+        controlCursos.setCommand(inscribirse3); controlCursos.executeCommand();
+        controlCursos.setCommand(inscribirse4); controlCursos.executeCommand();
 
-        controlCursos.setCommand(certificado);
-        controlCursos.executeCommand();
+        System.out.println("[COMMAND] ➜ Ejecutando SolicitarCertificado");
+        controlCursos.setCommand(certificado);  controlCursos.executeCommand();
 
-        controlCursos.setCommand(abandonar);
-        controlCursos.executeCommand();
+        System.out.println("[COMMAND] ➜ Ejecutando Abandonar curso");
+        controlCursos.setCommand(abandonar);    controlCursos.executeCommand();
 
         // =====================================================================
         // ======================== ITERATOR — PRUEBAS ==========================
         // =====================================================================
-        // Se recorre la lista de inscripciones del alumno mediante un iterador.
+        System.out.println("\n----------------------------------------------------");
+        System.out.println("[ITERATOR] ➜ Listado de inscripciones del alumno");
         InscripcionIterator inscripciones = alumno.inscripcionesIterator();
         System.out.println("El alumno " + alumno.getLegajo() + " está inscrito en:");
         while (inscripciones.hasNext()){
-            System.out.println("- " + inscripciones.next().getCurso().getMateria());
+            System.out.println("  - " + inscripciones.next().getCurso().getMateria());
         }
 
         // =====================================================================
         // ======================== OBSERVER — PRUEBAS ==========================
         // =====================================================================
-        // Se asigna un nuevo profesor al curso y se notifica a los alumnos.
+        System.out.println("\n----------------------------------------------------");
+        System.out.println("[OBSERVER] ➜ Notificación por cambio de profesor/aviso");
         Profesor profesor2 = new Profesor("Ricardo", "Centurion", "prueba@test.com", sala1);
 
         curso.addObserver(alumno);
         curso.addObserver(alumno2);
         curso.setProfesor(profesor2);
+        System.out.println("[OBSERVER] ➜ Enviando aviso al curso");
         curso.nuevoAviso("Se suspende la clase de consulta del 20/10 por viento zonda");
 
         // =====================================================================
         // ======================== MEMENTO — PRUEBAS ===========================
         // =====================================================================
-        // Se inicia un examen, se guarda su estado (memento), se modifica y se restaura.
+        System.out.println("\n----------------------------------------------------");
+        System.out.println("[MEMENTO] ➜ Guardar y restaurar estado de examen");
         Inscripcion inscripcion1 = new Inscripcion(alumno, curso);
         Examen examen1 = new Examen(inscripcion1,6.0f, LocalDateTime.now(),1);
         Memento m1 = examen1.save();
-        System.out.println("Estado inicial → nota= " + examen1.getNota());
+        System.out.println("[MEMENTO] Estado inicial → nota = " + examen1.getNota());
         examen1.setNota(9.0f);
-        System.out.println("Estado post modificacion de notas → nota= " + examen1.getNota());
+        System.out.println("[MEMENTO] Estado modificado → nota = " + examen1.getNota());
         examen1.restore(m1);
-        System.out.println("Estado final luego de restarurar examen → nota= " + examen1.getNota());
+        System.out.println("[MEMENTO] Estado restaurado → nota = " + examen1.getNota());
 
         // =====================================================================
         // ========================= VISITOR — PRUEBAS ==========================
         // =====================================================================
-        // Se aplica la lógica de becas visitando al alumno.
+        System.out.println("\n----------------------------------------------------");
+        System.out.println("[VISITOR] ➜ Aplicación de beca al alumno");
         AplicarBeca becas = new AplicarBeca();
         becas.visitar(alumno);
 
         // =====================================================================
         // ================= CHAIN OF RESPONSIBILITY — PRUEBAS =================
         // =====================================================================
-        // Se encadenan los handlers y se prueban reglas de validación en solicitudes:
-        // - s1 debe ser rechazada por ser en domingo.
-        // - s2 debe ser rechazada por duración > 4 hs en día hábil.
-        // - s3 debe ser aprobada al cumplir las restricciones.
+        System.out.println("\n----------------------------------------------------");
+        System.out.println("[CHAIN OF RESPONSIBILITY] ➜ Validación de solicitudes de tutoría");
         HandlerTutorias asistente = new HandlerAsistente();
         HandlerTutorias profesor = new HandlerProfesor();
         HandlerTutorias coordinador = new HandlerCoordinador();
@@ -125,6 +129,7 @@ public class Main {
         asistente.setNext(profesor);
         profesor.setNext(coordinador);
 
+        System.out.println("[CHAIN] ➜ Creando solicitudes (s1, s2, s3)");
         SolicitudTutoria s1 = new SolicitudTutoria(
                 alumno,
                 tutor,
@@ -149,8 +154,16 @@ public class Main {
                 LocalDateTime.of(2025, 9, 30, 15, 30)
         );
 
+        System.out.println("[CHAIN] ➜ Procesando s1 (debe ser rechazada por domingo)");
         asistente.handle(s1);
+        System.out.println("[CHAIN] ➜ Procesando s2 (rechazo por > 4 hs en día hábil)");
         asistente.handle(s2);
+        System.out.println("[CHAIN] ➜ Procesando s3 (debe ser aprobada)");
         asistente.handle(s3);
+
+        // Cierre
+        System.out.println("\n====================================================");
+        System.out.println("=============== FIN DE LA DEMOSTRACIÓN =============");
+        System.out.println("====================================================\n");
     }
 }
