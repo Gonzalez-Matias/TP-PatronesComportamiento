@@ -61,6 +61,9 @@ public class Main {
         );
         asistente.handle(s3);
 
+
+        //PATRON MEDIATOR
+        //Se agrega alumnos a una sala de chat creada previamente, y se intercambian mensajes
         Alumno alumno2 = new Alumno("Pedro", "Ricon", "pricon@fakemail.com",sala1 );
 
         sala1.agregarUsuario(alumno2);
@@ -97,7 +100,8 @@ public class Main {
 
         controlCursos.setCommand(abandonar);
         controlCursos.executeCommand();
-
+        
+        //PATRON MEMENTO
         //Se inicia examen y se guarda su estado para luego ser restaurado
 
         Inscripcion inscripcion1 = new Inscripcion(alumno,curso);
@@ -108,7 +112,8 @@ public class Main {
         System.out.println("Estado post modificacion de notas → nota= " + examen1.getNota());
         examen1.restore(m1);
         System.out.println("Estado final luego de restarurar examen → nota= " + examen1.getNota());
-      
+
+        //PATRON OBSERVER
         //Se modifica un curso y se notifica a los alumnos, se hace un aviso al curso
 
         Profesor profesor2 = new Profesor("Ricardo", "Centurion", "prueba@test.com", sala1);
