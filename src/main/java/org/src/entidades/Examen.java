@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 
 public class Examen {
     private Inscripcion inscripcion;
-    private float nota;
+    private Integer nota;
     private LocalDateTime fechaHoraExamen;
     private int numExamen;
 
-    public Examen(Inscripcion inscripcion, float nota, LocalDateTime fechaHoraExamen, int numExamen){
+    public Examen(Inscripcion inscripcion, Integer nota, LocalDateTime fechaHoraExamen, int numExamen){
         this.inscripcion = inscripcion;
         this.inscripcion.agregarExamen(this);
         this.nota = nota;
@@ -18,8 +18,8 @@ public class Examen {
         this.numExamen = numExamen;
     }
 
-    public float getNota() { return this.nota; }
-    public void setNota(float nota) { this.nota = nota; }
+    public Integer getNota() { return this.nota; }
+    public void setNota(Integer nota) { this.nota = nota; }
 
     public Memento save(){
         return new Memento(this.nota, this.fechaHoraExamen,this.numExamen);

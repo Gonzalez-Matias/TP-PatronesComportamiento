@@ -15,8 +15,8 @@ public class InscribirseCursoCommand implements Command{
 
     @Override
     public void execute() {
-        Inscripcion inscripcion = new Inscripcion(alumno, curso);
-        alumno.agregarInscripcion(inscripcion);
-        System.out.println("El Alumno " + this.alumno.getLegajo() + " se inscribió en la materia " + this.curso.getMateria());
+        new Inscripcion(alumno, curso);
+        curso.agregarAlumno(alumno);
+        System.out.println("El Alumno " + this.alumno.getLegajo() + " se inscribio en la materia " + this.curso.getMateria());
     }
 }

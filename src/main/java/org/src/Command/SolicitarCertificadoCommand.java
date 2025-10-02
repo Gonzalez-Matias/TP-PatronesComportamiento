@@ -1,6 +1,7 @@
 package org.src.Command;
 
 import org.src.Iterator.InscripcionIterator;
+import org.src.State.Cancelado;
 import org.src.entidades.Alumno;
 import org.src.entidades.Curso;
 import org.src.entidades.EstadoInscripcion;
@@ -20,7 +21,7 @@ public class SolicitarCertificadoCommand implements Command{
         InscripcionIterator inscripciones = alumno.inscripcionesIterator();
         while (inscripciones.hasNext()){
             Inscripcion inscripcion = inscripciones.next();
-            if (inscripcion.getEstado() != EstadoInscripcion.CANCELADO && inscripcion.getCurso() == this.curso) {
+            if (inscripcion.getEstado().getClass() != Cancelado.class && inscripcion.getCurso() == this.curso) {
                 System.out.println("Certificado del Alumno " + this.alumno.getLegajo() + " en la materia " + this.curso.getMateria() + " generado.");
             }
         }

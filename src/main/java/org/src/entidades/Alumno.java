@@ -3,16 +3,18 @@ package org.src.entidades;
 import org.src.Iterator.InscripcionIterator;
 import org.src.Mediator.ChatMediator;
 import org.src.Observer.CursoObserver;
-import org.src.Visitor.Visitor;
+import org.src.State.Cancelado;
+import org.src.Strategy.CalcularNota;
+import org.src.State.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Alumno extends Persona implements CursoObserver {
     private static final AtomicInteger SEQ = new AtomicInteger(100000);
     private List<Inscripcion> inscripciones = new ArrayList<>();
     private List<SolicitudTutoria> solicitudes = new ArrayList<>();
+    private CalcularNota strategy;
 
     public Alumno(String nombre, String apellido, String email, ChatMediator mediator) {
         super(nombre, apellido, email, mediator);
@@ -34,7 +36,7 @@ public class Alumno extends Persona implements CursoObserver {
     public InscripcionIterator inscripcionesIterator(){
         List<Inscripcion> inscripcionesVigentes = new ArrayList<>();
         for (Inscripcion inscripcion : this.inscripciones){
-            if (inscripcion.getEstado() != EstadoInscripcion.CANCELADO){
+            if (inscripcion.getEstado().getClass() != Cancelado.class){
                 inscripcionesVigentes.add(inscripcion);
             }
         }
@@ -72,5 +74,22 @@ public class Alumno extends Persona implements CursoObserver {
     @Override
     public void update(String msg) {
         System.out.println("Alumno " + nombre + " se notifica: " + msg);
+    }
+
+    public void setEstrategiaPromedio(CalcularNota estrategia){
+        this.strategy = estrategia;
+    }
+
+    public double calcularNota(Materia materia){
+        List<Integer> notas = new ArrayList<>();
+        for (Inscripcion insc : inscripciones){
+            Set<Examen> examenesMateria = insc.getExamenes();
+            if (!examenesMateria.isEmpty() && insc.getCurso().getMateria() == materia){
+                for (Examen examen : examenesMateria){
+                    notas.add(examen.getNota());
+                }
+            }
+        }
+        return strategy.calcular(notas);
     }
 }

@@ -16,10 +16,10 @@ public abstract class HandlerTutorias {
             next.handle(solicitud);
         } else if (revisarSolicitud(solicitud)) {
             solicitud.setEstado(EstadoSolicitudTutoria.APROBADA);
-            System.out.println("La solicitud fué aprobada por " + this.getClass().getName());
+            System.out.println("La solicitud fue aprobada por " + this.getClass().getName());
         } else {
             solicitud.setEstado(EstadoSolicitudTutoria.RECHAZADA);
-            System.out.println("La solicitud fué rechazada por " + this.getClass().getName());
+            System.out.println("La solicitud fue rechazada por " + this.getClass().getName());
         }
     };
 
